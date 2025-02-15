@@ -12,7 +12,7 @@ function Compress-String {
     #>
     [Cmdletbinding()]
     Param (
-        [Parameter(Mandatory,ValueFromPipeline)]
+        [Parameter(ValueFromPipeline)]
         [String[]]$String,
         [ValidateSet('Deflate','Brotli')]
         [String]$Algorithm = $(Set-CompressionAlgorithm)
@@ -60,8 +60,5 @@ function Compress-String {
         $MemoryStream.Dispose()
         Write-Verbose "Total string input length: $StringLength"
         Write-Verbose "Total string output length: $($Base64String.Length)"
-        if ($Error[0].CategoryInfo.Category -eq "InvalidData" -and $Error[0].CategoryInfo.Activity -eq "Compress-String") {
-            Write-Warning "Errors related to empty input found. If using Get-Content to pipe strings to Compress-String make sure to use the -Raw parameter"
-        }
     }
 }

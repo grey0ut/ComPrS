@@ -10,7 +10,7 @@ function Expand-String {
     Optionally specify a compression algorithm. Choices are DEFLATE or Brotli however Brotli is only available on PS Version 6.1 or newer. 
     #>
     Param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory)]
         [String]$String,
         [ValidateSet('Deflate','Brotli')]
         [String]$Algorithm = $(Set-CompressionAlgorithm)
