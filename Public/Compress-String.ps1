@@ -9,13 +9,18 @@ function Compress-String {
     If piping file content from Get-Content make sure to use the -Raw parameter with Get-Content to avoid sending empty strings.
     .PARAMETER Algorithm
     Optionally specify a compression algorithm. Choices are DEFLATE or Brotli however Brotli is only available on PS Version 6.1 or newer. 
+    .PARAMETER NoPreserve
+    By default when given an array of strings Compress-String will attempt to preserve formatting by joining each string together before compressing it.
+    This will bring over new line characters and blank lines so that when later expanded it will look the same.  If you'd prefer not to do that supply the -NoPreserve switch 
+    and each string will be streamed in to the compression writer.
     #>
     [Cmdletbinding()]
     Param (
         [Parameter(ValueFromPipeline)]
         [String[]]$String,
         [ValidateSet('Deflate','Brotli')]
-        [String]$Algorithm = $(Set-CompressionAlgorithm)
+        [String]$Algorithm = $(Set-CompressionAlgorithm),
+        [Switch]$NoPreserve
     )
 
     begin {
@@ -36,20 +41,51 @@ function Compress-String {
         }
         $StreamWriter = [System.IO.StreamWriter]::new($CompressionStream)
         $StringLength = 0
+        if ($MyInvocation.ExpectingInput) {
+            $PipeLineStrings = [System.Collections.ArrayList]::new()
+        }
+    }
+    # consider re-writing this so that all string objects are added together in to an array and the piped to Out-String.
+    # this will convert it in to a herestring which will preserve CR so when it's later expanded it still looks like the original
+    # https://communary.net/2015/01/12/quick-tip-determine-if-input-comes-from-the-pipeline-or-not/
+    # $MyInvocation.ExpectingInput
+    process {
+        if ($NoPreserve) {
+            foreach ($InputString in $String) {
+                try {
+                    $StreamWriter.Write($InputString)
+                    $StringLength += $InputString.Length
+                } catch {
+                    Write-Error $_
+                }
+            }
+        } else {
+            if ($MyInvocation.ExpectingInput) {
+                [Void]$PipeLineStrings.Add($String)
+            } else {
+                try {
+                    $InputString = $String | Out-String
+                    $StreamWriter.Write($InputString)
+                    $StringLength += $InputString.Length
+                } catch {
+                    Write-Error $_
+                }
+
+            }
+        }
+        
     }
 
-    process {
-        foreach ($InputString in $String) {
+    end {
+        if ($MyInvocation.ExpectingInput) {
             try {
+                $InputString = $PipelineStrings | Out-String
                 $StreamWriter.Write($InputString)
                 $StringLength += $InputString.Length
             } catch {
                 Write-Error $_
             }
         }
-    }
-
-    end {
         try {
             $StreamWriter.Close()
             $Base64String = [System.Convert]::ToBase64String($MemoryStream.ToArray())
