@@ -45,10 +45,7 @@ function Compress-String {
             $PipeLineStrings = [System.Collections.ArrayList]::new()
         }
     }
-    # consider re-writing this so that all string objects are added together in to an array and the piped to Out-String.
-    # this will convert it in to a herestring which will preserve CR so when it's later expanded it still looks like the original
-    # https://communary.net/2015/01/12/quick-tip-determine-if-input-comes-from-the-pipeline-or-not/
-    # $MyInvocation.ExpectingInput
+
     process {
         if ($NoPreserve) {
             foreach ($InputString in $String) {
