@@ -1,16 +1,14 @@
+ <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        text {
+            fill : #5e81ac;
+        }
+        tspan {
+            fill : #4488FF;
+        }
+    </style>
 
-<svg viewBox="0 0 200 100" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-    <text x="30%" y="50%" font-size="36" dominant-baseline="middle" text-anchor="middle" fill="#5e81ac">
-        Com
-    </text>
-    <text x="53%" y="50%" font-size="36" dominant-baseline="middle" text-anchor="middle" fill="#4488FF">
-        P
-    </text>
-    <text x="61%" y="50%" font-size="36" dominant-baseline="middle" text-anchor="middle" fill="#5e81ac">
-        r
-    </text>
-    <text x="69%" y="50%" font-size="36" dominant-baseline="middle" text-anchor="middle" fill="#4488FF">
-        S
-    </text>
-</svg>
-
+  <text x="50%" y="50%" text-anchor="middle" font-size="36">
+        Comp<tspan>P</tspan>r<tspan>S</tspan>
+  </text>
+</svg> 
