@@ -8,7 +8,7 @@
         }
     </style>
 
-  <text x="50%" y="50%" text-anchor="middle" font-size="36">
+  <text x="50%" y="50%" text-anchor="middle" font-size="36" font-family="monospace">
         Comp<tspan>P</tspan>r<tspan>S</tspan>
   </text>
 </svg> 
