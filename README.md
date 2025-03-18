@@ -4,9 +4,6 @@
 
 ComPrS
 ======  
-
-**WORK IN PROGRESS**  
-
 This is a small module for compressing text in Powershell.  It's not intended for creating compressed files, though what you do with the string output is up to you.  
 
 ## Getting Started  
