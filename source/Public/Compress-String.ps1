@@ -8,10 +8,10 @@ function Compress-String {
     String input for compressing.  If multiple strings are passed through the pipeline they will be included in the compression together and output as a single base64 string.
     If piping file content from Get-Content make sure to use the -Raw parameter with Get-Content to avoid sending empty strings.
     .PARAMETER Algorithm
-    Optionally specify a compression algorithm. Choices are DEFLATE or Brotli however Brotli is only available on PS Version 6.1 or newer. 
+    Optionally specify a compression algorithm. Choices are DEFLATE or Brotli however Brotli is only available on PS Version 6.1 or newer.
     .PARAMETER NoPreserve
     By default when given an array of strings Compress-String will attempt to preserve formatting by joining each string together before compressing it.
-    This will bring over new line characters and blank lines so that when later expanded it will look the same.  If you'd prefer not to do that supply the -NoPreserve switch 
+    This will bring over new line characters and blank lines so that when later expanded it will look the same.  If you'd prefer not to do that supply the -NoPreserve switch
     and each string will be streamed in to the compression writer.
     #>
     [Cmdletbinding()]
@@ -27,9 +27,9 @@ function Compress-String {
         if ($PSVersionTable.PSVersion -lt [Version]'6.1' -and $Algorithm -eq 'Brotli') {
             Write-Warning "PSVersion is <6.1. Brotli compression not available. Reverting to Deflate"
             $Algorithm = 'Deflate'
-        } 
-        
-        Write-Verbose "Algorithm: $Algorithm" 
+        }
+
+        Write-Verbose "Algorithm: $Algorithm"
         $MemoryStream = [System.IO.MemoryStream]::new()
         $CompressionStream = switch ($Algorithm) {
             'Deflate' {
@@ -42,7 +42,7 @@ function Compress-String {
         $StreamWriter = [System.IO.StreamWriter]::new($CompressionStream)
         $StringLength = 0
         if ($MyInvocation.ExpectingInput) {
-            $PipeLineStrings = [System.Collections.ArrayList]::new()
+            $PipeLineStrings = [System.Collections.Generic.List[string]]::new()
         }
     }
 
@@ -61,7 +61,7 @@ function Compress-String {
                 [Void]$PipeLineStrings.Add($String)
             } else {
                 try {
-                    $InputString = $String | Out-String
+                    $InputString = $String -join [System.Environment]::NewLine
                     $StreamWriter.Write($InputString)
                     $StringLength += $InputString.Length
                 } catch {
@@ -70,13 +70,13 @@ function Compress-String {
 
             }
         }
-        
+
     }
 
     end {
         if ($MyInvocation.ExpectingInput) {
             try {
-                $InputString = $PipelineStrings | Out-String
+                $InputString = $PipelineStrings -join [System.Environment]::NewLine
                 $StreamWriter.Write($InputString)
                 $StringLength += $InputString.Length
             } catch {

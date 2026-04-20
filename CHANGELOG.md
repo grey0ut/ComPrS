@@ -5,27 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- For new features.
-
-### Changed
-
-- For changes in existing functionality.
-
-### Deprecated
-
-- For soon-to-be removed features.
-
-### Removed
-
-- For now removed features.
-
 ### Fixed
 
-- For any bug fix.
-
-### Security
-
-- In case of vulnerabilities.
-
+- Replaced `out-string` with `[System.Environment]::NewLine` to fix issue with additional newline character being created.
+also required switching to a `system.collections.generic.list` for pipeline object collection.

@@ -4,7 +4,7 @@
 RootModule = 'ComPrS.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.1'
+ModuleVersion = '0.1.2'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Desktop', 'Core'
@@ -50,8 +50,11 @@ PrivateData = @{
         # A URL to the main website for this project.
         ProjectUri = 'https://github.com/grey0ut/ComPrS'
 
+        # ReleaseNotes of this module
+        ReleaseNotes = ''
+
     } # End of PSData hashtable
-    
+
  } # End of PrivateData hashtable
 
 }
